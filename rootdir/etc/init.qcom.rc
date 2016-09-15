@@ -246,8 +246,6 @@ on boot
 
 # msm specific files that need to be created on /data
 on post-fs-data
-
-    mkdir /data/misc/bluetooth 0770 bluetooth bluetooth
     
     mkdir /data/misc/wifi/prima 0775 wifi wifi
 
