@@ -66,6 +66,9 @@ ro.qualcomm.perf.cores_online=2
 ro.vendor.extension_library=libqti-perfd-client.so
 drm.service.enabled=true
 
+# OMX properties
+persist.media.treble_omx=false
+
 # Wifi
 wifi.interface=wlan0
 wifi.supplicant_scan_interval=180
