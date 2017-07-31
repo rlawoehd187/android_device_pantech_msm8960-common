@@ -55,6 +55,9 @@ dalvik.vm.heapmaxfree=8m
 media.stagefright.legacyencoder=true
 media.stagefright.less-secure=true
 
+# Display
+debug.hwui.use_buffer_age=false
+
 # Navigation Bar
 qemu.hw.mainkeys=0
 
