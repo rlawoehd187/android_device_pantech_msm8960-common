@@ -121,6 +121,10 @@ WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := true
 # SDClang
 TARGET_USE_SDCLANG := true
 
+# Shims
+TARGET_LD_SHIM_LIBS := \
+    /system/vendor/bin/mpdecision|libshims_atomic.so \
+
 # Init
 TARGET_NO_INITLOGO := true
 

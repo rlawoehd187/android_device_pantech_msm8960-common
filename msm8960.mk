@@ -263,6 +263,10 @@ PRODUCT_PACKAGES += \
     android.hardware.sensors@1.0-impl \
     sensors.msm8960
 
+# Shims
+PRODUCT_PACKAGES += \
+    libshims_atomic
+
 # USB
 PRODUCT_PACKAGES += \
     android.hardware.usb@1.0-service.basic
