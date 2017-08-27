@@ -23,13 +23,14 @@ DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
 # WiFi
 PRODUCT_PACKAGES += \
-	libwfcu \
-	libwpa_client \
-	hostapd \
+    libwfcu \
+    libwpa_client \
+    hostapd \
     hostapd_default.conf \
     hostapd.accept \
     hostapd.deny \
-	wpa_supplicant
+    wificond \
+    wpa_supplicant
 
 PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-service \
