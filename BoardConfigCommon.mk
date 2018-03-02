@@ -104,6 +104,7 @@ TARGET_USES_MEDIA_EXTENSIONS := true
 
 #Ril class
 BOARD_RIL_CLASS := ../../../device/pantech/msm8960-common/ril/
+TARGET_RIL_VARIANT := caf
 
 #Use cyanogenmod hardware
 BOARD_USES_CYANOGEN_HARDWARE := true
