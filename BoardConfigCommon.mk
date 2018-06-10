@@ -109,6 +109,8 @@ TARGET_HAS_LEGACY_CAMERA_HAL1 := true
 #Media
 TARGET_USES_MEDIA_EXTENSIONS := true
 
+# HIDL
+DEVICE_MANIFEST_FILE := $(COMMON_PATH)/manifest.xml
 
 #Ril class
 BOARD_RIL_CLASS := ../../../device/pantech/msm8960-common/ril/
