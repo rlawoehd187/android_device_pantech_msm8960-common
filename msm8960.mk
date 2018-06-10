@@ -128,7 +128,8 @@ PRODUCT_PACKAGES += \
 
 # Power
 PRODUCT_PACKAGES += \
-	power.msm8960
+    android.hardware.power@1.0-impl \
+    power.msm8960
 
 # Bluetooth
 PRODUCT_PACKAGES += \
