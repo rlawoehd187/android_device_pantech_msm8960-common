@@ -21,9 +21,6 @@ $(call inherit-product, vendor/pantech/msm8960-common/msm8960-common-vendor.mk)
 
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
-#Google Camera
-PRODUCT_PACKAGES += Snap
-
 # WiFi
 PRODUCT_PACKAGES += \
 	libwfcu \
@@ -35,6 +32,7 @@ PRODUCT_PACKAGES += \
 	wpa_supplicant
 
 PRODUCT_PACKAGES += \
+    android.hardware.wifi@1.0-service \
     libwcnss_qmi \
     wcnss_service
 	
@@ -57,6 +55,9 @@ PRODUCT_PACKAGES += \
 
 # Display
 PRODUCT_PACKAGES += \
+    android.hardware.graphics.allocator@2.0-impl \
+    android.hardware.graphics.mapper@2.0-impl \
+    android.hardware.graphics.composer@2.1-impl \
     copybit.msm8960 \
     gralloc.msm8960 \
     hwcomposer.msm8960 \
@@ -65,6 +66,8 @@ PRODUCT_PACKAGES += \
 	
 # Audio
 PRODUCT_PACKAGES += \
+    android.hardware.audio@2.0-impl \
+    android.hardware.audio.effect@2.0-impl \
     audio.a2dp.default \
     audio.primary.msm8960 \
     audio.r_submix.default \
@@ -122,6 +125,11 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
 	power.msm8960
 
+# Bluetooth
+PRODUCT_PACKAGES += \
+    android.hardware.bluetooth@1.0-impl \
+    libbt-vendor
+
 #GPS
 #PRODUCT_PACKAGES += \
 	libloc_adapter \
@@ -150,6 +158,10 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/audio_policy.conf:system/etc/audio_policy.conf \
     $(LOCAL_PATH)/configs/mixer_paths.xml:system/etc/mixer_paths.xml
 
+# HIDL Manifest
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/manifest.xml:system/vendor/manifest.xml
+
 # Media
 PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/configs/media_profiles.xml:system/etc/media_profiles.xml \
@@ -170,12 +182,18 @@ PRODUCT_PACKAGES += \
 	init.qcom.sh \
 	ueventd.qcom.rc 
 
-#Camera
+# Camera
 PRODUCT_PACKAGES += \
 	CE150F00.bin \
 	CE150F01.bin \
 	CE150F02_89.bin \
 	CE150F03_89.bin
+
+PRODUCT_PACKAGES += \
+    android.hardware.camera.provider@2.4-impl-legacy \
+    camera.device@1.0-impl-legacy \
+    Snap \
+    camera.msm8960
 
 # Qcom scripts
 PRODUCT_PACKAGES += \
@@ -203,9 +221,18 @@ PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml \
 	frameworks/native/data/etc/android.hardware.usb.host.xml:system/etc/permissions/android.hardware.usb.host.xml
 
+# Keymaster
+PRODUCT_PACKAGES += \
+    android.hardware.keymaster@3.0-impl
+
+# Lights
+PRODUCT_PACKAGES += \
+    android.hardware.light@2.0-impl \
 
 # NFC Support
 PRODUCT_PACKAGES += \
+    android.hardware.nfc@1.0-impl \
+    android.hardware.nfc@1.0-service \
     nfc.msm8960 \
     libnfc \
     libnfc_jni \
@@ -216,5 +243,17 @@ PRODUCT_PACKAGES += \
 # NFC access control + feature files + configuration
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.nfc.xml:system/etc/permissions/android.hardware.nfc.xml
+
+# Sensors
+PRODUCT_PACKAGES += \
+    android.hardware.sensors@1.0-impl
+
+# USB
+PRODUCT_PACKAGES += \
+    android.hardware.usb@1.0-service
+
+# Vibrator
+PRODUCT_PACKAGES += \
+    android.hardware.vibrator@1.0-impl
 
 # $(call inherit-product, hardware/qcom/msm8960/msm8960.mk)
