@@ -104,6 +104,7 @@ TARGET_USES_MEDIA_EXTENSIONS := true
 
 # HIDL
 DEVICE_MANIFEST_FILE := $(COMMON_PATH)/manifest.xml
+DEVICE_MATRIX_FILE := $(COMMON_PATH)/compatibility_matrix.xml
 
 # Ril class
 BOARD_RIL_CLASS := ../../../device/pantech/msm8960-common/ril/
@@ -170,8 +171,7 @@ PRODUCT_PREBUILT_WEBVIEWCHROMIUM 	:= yes
 EXTENDED_FONT_FOOTPRINT 			:= true
 
 # qcom sepolicy
-# include device/qcom/sepolicy/sepolicy.mk
-include device/qcom/sepolicy-legacy/sepolicy.mk
+include device/qcom/sepolicy/sepolicy.mk
 
 #BOARD_SEPOLICY_DIRS += \
        device/pantech/msm8960-common/sepolicy
