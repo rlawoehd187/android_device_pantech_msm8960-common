@@ -7,7 +7,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # IO Scheduler
 PRODUCT_PROPERTY_OVERRIDES += \
-	sys.io.scheduler=bfq
+	sys.io.scheduler=cfq
 
 # Do not power down SIM card when modem is sent to Low Power Mode.
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -19,8 +19,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 PRODUCT_PROPERTY_OVERRIDES += \
 	ro.telephony.default_network=9 \
-	ro.product.locale.language=vi \
-	ro.product.locale.region=VN \
+	ro.product.locale.language=ko \
+	ro.product.locale.region=KR \
 	ro.qualcomm.bt.hci_transport=smd \
 	persist.sys.dalvik.multithread=true \
 

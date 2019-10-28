@@ -170,7 +170,6 @@ PRODUCT_PACKAGES += \
 	init.qcom.sh \
 	init.recovery.qcom.rc \
 	ueventd.qcom.rc \
-	preinstall.sh \
 	initlogo.rle \
 	battery_fail.png \
 	battery_scale.png
