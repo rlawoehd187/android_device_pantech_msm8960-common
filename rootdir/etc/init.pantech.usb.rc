@@ -1,0 +1,354 @@
+# Copyright (c) 2011, Code Aurora Forum. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of Code Aurora nor
+#       the names of its contributors may be used to endorse or promote
+#       products derived from this software without specific prior written
+#       permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NON-INFRINGEMENT ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+# EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+# ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+
+
+on init
+    write /sys/class/android_usb/android0/f_rndis/wceis 1
+
+service pantech-usb-sh /system/bin/sh /init.pantech.usb.sh
+    class core
+    user root
+    oneshot
+
+# Pantech USB compositions CONFIG_PANTECH_ANDROID_USB(+)
+
+on usb-charging-mode
+	write /sys/class/android_usb/android0/enable 0
+	write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1104
+    write /sys/class/android_usb/android0/f_diag/clients diag,diag_mdm
+	write /sys/class/android_usb/android0/functions diag
+	write /sys/class/android_usb/android0/enable 1
+
+on property:sys.usb.config=diag,diag_mdm,serial_hsic,mass_storage,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1104
+    write /sys/class/android_usb/android0/f_diag/clients diag,diag_mdm
+    write /sys/class/android_usb/android0/f_serial/transports hsic
+    write /sys/class/android_usb/android0/functions diag,adb,serial,mass_storage
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=diag,diag_mdm,serial_hsic,mass_storage
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1104
+    write /sys/class/android_usb/android0/f_diag/clients diag,diag_mdm
+    write /sys/class/android_usb/android0/f_serial/transports hsic
+    write /sys/class/android_usb/android0/functions diag,serial,mass_storage
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state ${sys.usb.config}
+
+### Tethering On
+on property:sys.usb.config=rndis,diag,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1104
+    write /sys/class/android_usb/android0/f_diag/clients diag
+    write /sys/class/android_usb/android0/functions rndis,diag,adb
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=rndis,diag
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1104
+    write /sys/class/android_usb/android0/f_diag/clients diag
+    write /sys/class/android_usb/android0/functions rndis,diag
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=rndis,diag,diag_mdm,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1104
+    write /sys/class/android_usb/android0/f_diag/clients diag,diag_mdm
+    write /sys/class/android_usb/android0/functions rndis,diag,adb
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=rndis,diag,diag_mdm
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1104
+    write /sys/class/android_usb/android0/f_diag/clients diag,diag_mdm
+    write /sys/class/android_usb/android0/functions rndis,diag
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=rndis,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1104
+    write /sys/class/android_usb/android0/functions rndis,adb
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=rndis
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1104
+    write /sys/class/android_usb/android0/functions rndis
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state ${sys.usb.config}
+
+### MTP_mode
+on property:sys.usb.config=mtp,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1105
+    write /sys/class/android_usb/android0/functions mtp,adb
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=mtp
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1105
+    write /sys/class/android_usb/android0/functions mtp
+    write /sys/class/android_usb/android0/enable 1
+	setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=mass_storage,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1104
+    write /sys/class/android_usb/android0/functions adb,mass_storage
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
+
+### Mass-storage only composition
+on property:sys.usb.config=mass_storage
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct F000
+    write /sys/class/android_usb/android0/functions mass_storage
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state ${sys.usb.config}
+
+### Default mode , PC_Mode
+on property:sys.usb.config=diag,diag_mdm,serial_hsic,obex,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1104
+    write /sys/class/android_usb/android0/f_diag/clients diag,diag_mdm
+    write /sys/class/android_usb/android0/f_serial/transports hsic
+    write /sys/class/android_usb/android0/functions diag,adb,serial,obex
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=diag,diag_mdm,serial_hsic,obex
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1104
+    write /sys/class/android_usb/android0/f_diag/clients diag,diag_mdm
+    write /sys/class/android_usb/android0/f_serial/transports hsic
+    write /sys/class/android_usb/android0/functions diag,serial,obex
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state ${sys.usb.config}
+
+### LGU Default mode , PC_Mode
+on property:sys.usb.config=mtp,diag,diag_mdm,serial_hsic,obex,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1105
+    write /sys/class/android_usb/android0/f_diag/clients diag,diag_mdm
+    write /sys/class/android_usb/android0/f_serial/transports hsic
+    write /sys/class/android_usb/android0/functions mtp,diag,serial,obex,adb
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=mtp,diag,diag_mdm,serial_hsic,obex
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1105
+    write /sys/class/android_usb/android0/f_diag/clients diag,diag_mdm
+    write /sys/class/android_usb/android0/f_serial/transports hsic
+    write /sys/class/android_usb/android0/functions mtp,diag,serial,obex
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state ${sys.usb.config}
+
+### Default mode for CD Free
+on property:sys.usb.config=cdrom,diag,diag_mdm,serial_hsic,obex,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1104
+    write /sys/class/android_usb/android0/f_diag/clients diag,diag_mdm
+    write /sys/class/android_usb/android0/f_serial/transports hsic
+    write /sys/class/android_usb/android0/functions cdrom,diag,adb,serial,obex
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=cdrom,diag,diag_mdm,serial_hsic,obex
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1104
+    write /sys/class/android_usb/android0/f_diag/clients diag,diag_mdm
+    write /sys/class/android_usb/android0/f_serial/transports hsic
+    write /sys/class/android_usb/android0/functions cdrom,diag,serial,obex
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state ${sys.usb.config}
+
+### LGU Default mode for CD Free
+on property:sys.usb.config=cdrom,mtp,diag,diag_mdm,serial_hsic,obex,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1105
+    write /sys/class/android_usb/android0/f_diag/clients diag,diag_mdm
+    write /sys/class/android_usb/android0/f_serial/transports hsic
+    write /sys/class/android_usb/android0/functions cdrom,mtp,diag,serial,obex,adb
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=cdrom,mtp,diag,diag_mdm,serial_hsic,obex
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1105
+    write /sys/class/android_usb/android0/f_diag/clients diag,diag_mdm
+    write /sys/class/android_usb/android0/f_serial/transports hsic
+    write /sys/class/android_usb/android0/functions cdrom,mtp,diag,serial,obex
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state ${sys.usb.config}
+
+### PTP_mode
+on property:sys.usb.config=ptp,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1104
+    write /sys/class/android_usb/android0/functions ptp,adb
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=ptp
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1104
+    write /sys/class/android_usb/android0/functions ptp
+    write /sys/class/android_usb/android0/enable 1
+    setprop sys.usb.state ${sys.usb.config}
+
+
+### FACTORY_mode
+on property:sys.usb.config=diag,diag_mdm,serial_hsic,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1104
+    write /sys/class/android_usb/android0/f_diag/clients diag,diag_mdm
+    write /sys/class/android_usb/android0/f_serial/transports hsic
+    write /sys/class/android_usb/android0/functions diag,serial,adb
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=diag,diag_mdm,serial_hsic
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1104
+    write /sys/class/android_usb/android0/f_diag/clients diag,diag_mdm
+    write /sys/class/android_usb/android0/f_serial/transports hsic
+    write /sys/class/android_usb/android0/functions diag,serial
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
+
+### RMNET_mode
+on property:sys.usb.config=diag,diag_mdm,rmnet_hsic,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1104
+    write /sys/class/android_usb/android0/f_diag/clients diag,diag_mdm
+    write /sys/class/android_usb/android0/f_rmnet/transports hsic,hsic
+    write /sys/class/android_usb/android0/functions rmnet,diag,adb
+#    write /sys/class/android_usb/android0/functions rmnet
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
+
+### Qualcomm_mode - # Fusion 3 composition with diag_mdm and adb
+on property:sys.usb.config=diag,diag_mdm,serial_hsic,serial_tty,rmnet_hsic,mass_storage,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 05C6
+    write /sys/class/android_usb/android0/idProduct 9031
+    write /sys/class/android_usb/android0/f_diag/clients diag,diag_mdm
+    write /sys/class/android_usb/android0/f_serial/transports hsic,tty
+    write /sys/class/android_usb/android0/f_rmnet/transports hsic,hsic
+    write /sys/class/android_usb/android0/functions diag,adb,serial,rmnet,mass_storage
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=diag,diag_mdm,serial_hsic,serial_tty,rmnet_hsic,mass_storage
+	write /sys/class/android_usb/android0/enable 0
+	write /sys/class/android_usb/android0/idVendor 05C6
+	write /sys/class/android_usb/android0/idProduct 9032
+	write /sys/class/android_usb/android0/f_diag/clients diag,diag_mdm
+	write /sys/class/android_usb/android0/f_serial/transports hsic,tty
+	write /sys/class/android_usb/android0/f_rmnet/transports hsic,hsic
+	write /sys/class/android_usb/android0/functions diag,serial,rmnet,mass_storage
+	write /sys/class/android_usb/android0/enable 1
+	setprop sys.usb.state ${sys.usb.config}
+
+### PST Tool mode, FEATURE_PANTECH_PST_USB_MODE_CHANGE	
+on property:sys.usb.config=mtp,diag,serial_hsic,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1105
+    write /sys/class/android_usb/android0/f_diag/clients diag
+    write /sys/class/android_usb/android0/f_serial/transports hsic
+    write /sys/class/android_usb/android0/functions mtp,diag,serial,adb
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=mtp,diag,diag_mdm,serial_hsic,adb
+    write /sys/class/android_usb/android0/enable 0
+    write /sys/class/android_usb/android0/idVendor 10A9
+    write /sys/class/android_usb/android0/idProduct 1105
+    write /sys/class/android_usb/android0/f_diag/clients diag,diag_mdm
+    write /sys/class/android_usb/android0/f_serial/transports hsic
+    write /sys/class/android_usb/android0/functions mtp,diag,serial,adb
+    write /sys/class/android_usb/android0/enable 1
+    start adbd
+    setprop sys.usb.state ${sys.usb.config}
+
+on property:sys.usb.config=usb_disabled
+	write /sys/class/android_usb/android0/enable 0
+	setprop sys.usb.state ${sys.usb.config}
+
+# Pantech USB compositions (-)	

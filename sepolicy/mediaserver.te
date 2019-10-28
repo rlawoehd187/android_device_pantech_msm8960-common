@@ -1,0 +1,6 @@
+allow mediaserver camera_prop:property_service set;
+##6.0
+allow mediaserver system_file:file execmod;
+# For text relocations in /system/vendor/lib/libmmjpeg.so
+allow mediaserver system_file:file execmod;
+##6.0

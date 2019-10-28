@@ -1,0 +1,25 @@
+# Android fstab file.
+#<src>                                         <mnt_point>  <type>  <mnt_flags and options>  <fs_mgr_flags>
+# The filesystem that contains the filesystem checker binary (typically /system) cannot
+# specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
+
+/system		auto	/dev/block/platform/msm_sdcc.1/by-name/system         flags=fsflags="inline_xattr";display="System"
+/data		auto	/dev/block/platform/msm_sdcc.1/by-name/userdata 	  flags=fsflags="inline_xattr";display="Internal Storage"	length=-16384
+/cache		auto	/dev/block/platform/msm_sdcc.1/by-name/cache          flags=fsflags="inline_xattr";display="Cache"
+/persist	ext4	/dev/block/platform/msm_sdcc.1/by-name/persist		flags=display="persist";backup=1
+/firmware	vfat	/dev/block/platform/msm_sdcc.1/by-name/modem		flags=display="modem";backup=1
+/boot		emmc	/dev/block/platform/msm_sdcc.1/by-name/boot			flags=display="Boot"
+/recovery	emmc	/dev/block/platform/msm_sdcc.1/by-name/recovery
+/efs1         emmc   /dev/block/platform/msm_sdcc.1/by-name/m9kefs1 flags=backup=1;display=EFS
+/efs2         emmc   /dev/block/platform/msm_sdcc.1/by-name/m9kefs2 flags=backup=1;subpartitionof=/efs1
+/efs3         emmc   /dev/block/platform/msm_sdcc.1/by-name/m9kefs3 flags=backup=1;subpartitionof=/efs1
+#/misc		emmc	/dev/block/platform/msm_sdcc.1/by-name/misc
+#/sbl1		emmc	/dev/block/platform/msm_sdcc.1/by-name/sbl1
+#/tz			emmc	/dev/block/platform/msm_sdcc.1/by-name/tz
+#/rpm		emmc	/dev/block/platform/msm_sdcc.1/by-name/rpm
+#/sdi		emmc	/dev/block/platform/msm_sdcc.1/by-name/sdi
+#/aboot		emmc	/dev/block/platform/msm_sdcc.1/by-name/aboot
+/rawdata		emmc	/dev/block/platform/msm_sdcc.1/by-name/rawdata flags=display="Phone info";backup=1
+
+/external_sd   	   auto      /dev/block/mmcblk1p1 		flags=display="external_sd";storage;wipeingui;removable
+/usbdisk	   auto		/dev/block/sda1		/dev/block/sda 		flags=display="USB OTG";storage;removable

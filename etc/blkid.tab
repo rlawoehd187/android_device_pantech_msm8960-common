@@ -1,0 +1,3 @@
+<device DEVNO="0xb310" TIME="1433256057" UUID="12eb38ef-969a-4961-ac39-d4abc75439b6" TYPE="f2fs">/dev/block/platform/msm_sdcc.1/by-name/cache</device>
+<device DEVNO="0xb31a" TIME="1433277681" UUID="c9fe3c6e-b46a-48df-9eab-a9485da521c0" TYPE="f2fs">/dev/block/platform/msm_sdcc.1/by-name/userdata</device>
+<device DEVNO="0xb321" TIME="1434733436" LABEL="SDCARD" UUID="0F26-CD60" TYPE="vfat">/dev/block/vold/179:33</device>

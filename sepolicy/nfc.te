@@ -1,0 +1,2 @@
+
+allow nfc init:unix_dgram_socket write;

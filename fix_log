@@ -1,0 +1,15 @@
+camera fixed, use media_profiles.xml
+
+radio:Fixed, dont need ril symbol to fix missing symbol, everything work fine, fix more > dont need ril_class
+
+sensor: ok
+
+vibrator: fixed, modify kernel or cm source
+
+RilClass: worked but not tested( changed to 6.0 class)
+
+USB, MTP, sdcard: fixed (Update fstab and init.qcom.rc)
+
+Kernel panic on boot: fixed
+
+Vendor init: worked

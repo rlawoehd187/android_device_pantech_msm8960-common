@@ -1,0 +1,32 @@
+allow init app_data_file:dir { write read open add_name setattr };
+allow init app_data_file:lnk_file create;
+allow init drmserver_service:service_manager add;
+allow init firmware_file:dir mounton;
+allow init keystore_service:service_manager add;
+allow init mediaserver_service:service_manager add;
+allow init self:rawip_socket { getopt create setopt };
+allow init shell_data_file:dir { write add_name };
+allow init shell_data_file:lnk_file { create getattr };
+allow init surfaceflinger_service:service_manager add;
+allow init system_server:process { dyntransition getattr };
+
+allow init fuse:dir setattr;
+allow init platform_app:process { dyntransition getattr };
+allow init self:udp_socket { setopt connect };
+allow init system_server:process getpgid;
+allow init untrusted_app:process { dyntransition getattr };
+
+##6.0
+allow init efs_data_file:dir mounton;
+allow init sysfs_writable:file getattr;
+allow init wcnss_device:chr_file write;
+##6.0
+
+recovery_only(`
+#Allow for init.recovery.qcom.rc
+allow init app_data_file:file getattr;
+allow init ashmem_device:chr_file execute;
+allow init self:process execmem;
+allow init vfat:dir { read open };
+allow init vfat:file getattr;
+')

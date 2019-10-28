@@ -1,0 +1,6 @@
+allow mpdecision self:process execmem;
+
+type_transition mpdecision socket_device:sock_file mpctl_socket;
+allow mpdecision socket_device:sock_file { write create setattr unlink };
+binder_use(mpdecision)
+allow mpdecision system_data_file:dir { add_name write };

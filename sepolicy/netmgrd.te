@@ -1,0 +1,4 @@
+allow netmgrd self:process execmem;
+allow netmgrd self:packet_socket { create bind read write };
+# Uses network sockets.
+net_domain(netmgrd)

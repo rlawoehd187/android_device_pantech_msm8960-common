@@ -1,0 +1,5 @@
+
+allow sensors self:process execmem;
+
+allow sensors unlabeled:dir { read search open getattr setattr };
+allow sensors unlabeled:file { read write getattr open append };
