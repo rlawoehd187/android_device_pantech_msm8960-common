@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 The CyanogenMod Project
+ *               2017 The LineageOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.cyanogenmod.settings.device;
+package org.lineageos.settings.doze;
 
 import android.app.ActionBar;
 import android.os.Bundle;
@@ -25,7 +26,7 @@ import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import org.cyanogenmod.internal.util.ScreenType;
+import org.lineageos.internal.util.ScreenType;
 
 public class TouchscreenGestureSettings extends PreferenceActivity {
 
