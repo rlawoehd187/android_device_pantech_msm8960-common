@@ -15,7 +15,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # Our RIL class
 PRODUCT_PROPERTY_OVERRIDES += \
-	ro.telephony.ril_class=TRIL \
+	ro.telephony.ril_class=VegaRIL \
 	ro.ril.telephony.mqanelements=5
 
 # Ril sends only one RIL_UNSOL_CALL_RING, so set call_ring.multiple to false
