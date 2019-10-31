@@ -55,10 +55,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     Gello
 
-# DozeAPP
-PRODUCT_PACKAGES += \
-    PantechDoze
-
 # Display
 PRODUCT_PACKAGES += \
     copybit.msm8960 \
@@ -168,11 +164,7 @@ PRODUCT_PACKAGES += \
 	init.qcom.power.rc \
 	init.qcom.rc \
 	init.qcom.sh \
-	init.recovery.qcom.rc \
-	ueventd.qcom.rc \
-	initlogo.rle \
-	battery_fail.png \
-	battery_scale.png
+	ueventd.qcom.rc 
 
 #Camera
 PRODUCT_PACKAGES += \
