@@ -103,4 +103,4 @@ on property:init.svc.recovery=running
 
 on property:dev.bootcomplete=1
     rm /data/system/default_values
-    start mpdecision
+    write /sys/kernel/msm_mpdecision/conf/enabled 1
