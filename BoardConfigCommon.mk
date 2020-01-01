@@ -13,6 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+COMMON_PATH := device/pantech/msm8960-common
+
 # inherit from the proprietary version
 -include vendor/pantech/msm8960-common/BoardConfigVendor.mk
 TARGET_SPECIFIC_HEADER_PATH 		:= device/pantech/msm8960-common/include
@@ -123,7 +126,7 @@ TARGET_POWERHAL_VARIANT			:= qcom
 #CM_POWERHAL_EXTENSION			:= lehoang
 
 # Properties
-TARGET_SYSTEM_PROP += /home/hiru/android/7.1/aex/device/pantech/msm8960-common/system.prop
+TARGET_SYSTEM_PROP += $(COMMON_PATH)/system.prop
 
 # Enable dex-preoptimization to speed up first boot sequence
 ifeq ($(HOST_OS),linux)
