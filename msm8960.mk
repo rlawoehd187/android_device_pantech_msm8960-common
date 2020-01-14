@@ -114,6 +114,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
 	libcnefeatureconfig
 
+# DRM
+PRODUCT_PACKAGES += \
+    libshims_wvm
+
 # Power
 PRODUCT_PACKAGES += \
 	power.msm8960
