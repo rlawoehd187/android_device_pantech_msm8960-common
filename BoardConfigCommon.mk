@@ -44,7 +44,7 @@ TARGET_USES_64_BIT_BINDER := true
 # QCOM hardware
 BOARD_USES_QCOM_HARDWARE := true
 
-#Boot and recovery config
+# Boot and recovery config
 BOARD_KERNEL_BASE := 0x80200000
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_FORCE_RAMDISK_ADDRESS := 0x82200000
@@ -99,17 +99,20 @@ BOARD_USES_EXTRA_THERMAL_SENSOR 	:= true
 TARGET_PROVIDES_CAMERA_HAL := true
 USE_DEVICE_SPECIFIC_CAMERA := true
 
-#Media
+# Media
 TARGET_USES_MEDIA_EXTENSIONS := true
 
 # HIDL
 DEVICE_MANIFEST_FILE := $(COMMON_PATH)/manifest.xml
 
-#Ril class
+# Ril class
 BOARD_RIL_CLASS := ../../../device/pantech/msm8960-common/ril/
 
-#Preload Boot Animation
+# Preload Boot Animation
 TARGET_BOOTANIMATION_PRELOAD 		:= true
+
+# Shipping API
+PRODUCT_SHIPPING_API_LEVEL := 19
 
 # GPS
 BOARD_VENDOR_QCOM_LOC_PDK_FEATURE_SET := true
