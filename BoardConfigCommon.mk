@@ -38,6 +38,9 @@ TARGET_CPU_ABI := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
 TARGET_CPU_VARIANT := krait
 
+# Binder
+TARGET_USES_64_BIT_BINDER := true
+
 # QCOM hardware
 BOARD_USES_QCOM_HARDWARE := true
 
