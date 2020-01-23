@@ -1,5 +1,5 @@
 /*
-   Copyright (c) 2016, XDAVN
+   Copyright (c) 2016, The LineageOS Project
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions are
    met:
@@ -26,30 +26,45 @@
  */
 
 #include <stdlib.h>
+#include <stdio.h>
+#include <fcntl.h>
+#include <unistd.h>
+#define _REALLY_INCLUDE_SYS__SYSTEM_PROPERTIES_H_
+#include <sys/_system_properties.h>
+#include <android-base/logging.h>
+#include <android-base/properties.h>
 
 #include "vendor_init.h"
 #include "property_service.h"
-#include "log.h"
-#include "util.h"
+
+using android::base::GetProperty;
 
 #define ISMATCH(a,b)    (!strncmp(a,b,PROP_VALUE_MAX))
 
+void property_override(char const prop[], char const value[])
+{
+    prop_info *pi;
+
+    pi = (prop_info*) __system_property_find(prop);
+    if (pi)
+        __system_property_update(pi, value, strlen(value));
+    else
+        __system_property_add(prop, strlen(prop), value, strlen(value));
+}
+
 void vendor_load_properties()
 {
-    std::string platform;
-    std::string device;
     int n = 0;
     char device_buf[PROP_VALUE_MAX];
     FILE *fp = NULL;
 
-    platform = property_get("ro.board.platform");
+    std::string platform = GetProperty("ro.board.platform", "");
     if (platform != ANDROID_TARGET)
         return;
 
     fp = fopen("/dev/block/platform/msm_sdcc.1/by-name/rawdata", "r");
     if ( fp == NULL )
     {
-        INFO("Failed to open info for board version read");
         return;
     }
     else
@@ -60,49 +75,49 @@ void vendor_load_properties()
         fclose(fp);
     }
 	//Prop for ril class
-	property_set("ro.telephony.ril_class", "SkyHLRIL");
+	property_override("ro.telephony.ril_class", "SkyHLRIL");
 
-    property_set("ro.product.model", device_buf);
+    property_override("ro.product.model", device_buf);
 	// A870
     if (strstr(device_buf, "IM-A870S")) 
     {
-        property_set("ro.product.device", "ef52s");
+        property_override("ro.product.device", "ef52s");
     } 
     else if (strstr(device_buf, "IM-A870K")) 
     {
-        property_set("ro.product.device", "ef52k");
+        property_override("ro.product.device", "ef52k");
     } 
     else if (strstr(device_buf, "IM-A870L"))
     {
-        property_set("ro.product.device", "ef52l");
-		property_set("telephony.lteOnCdmaDevice", "1"); //Only L device support CDMA-2000 1xEV-DO
+        property_override("ro.product.device", "ef52l");
+		property_override("telephony.lteOnCdmaDevice", "1"); //Only L device support CDMA-2000 1xEV-DO
     }
     //A860
     if (strstr(device_buf, "IM-A860S")) 
     {
-        property_set("ro.product.device", "ef51l");
+        property_override("ro.product.device", "ef51l");
     } 
     else if (strstr(device_buf, "IM-A860K")) 
     {
-        property_set("ro.product.device", "ef51k");
+        property_override("ro.product.device", "ef51k");
     } 
     else if (strstr(device_buf, "IM-A860L"))
     {
-        property_set("ro.product.device", "ef51l");
-		property_set("telephony.lteOnCdmaDevice", "1"); //Only L device support CDMA-2000 1xEV-DO
+        property_override("ro.product.device", "ef51l");
+		property_override("telephony.lteOnCdmaDevice", "1"); //Only L device support CDMA-2000 1xEV-DO
     }
 	// A850
     if (strstr(device_buf, "IM-A850S")) 
     {
-        property_set("ro.product.device", "ef48s");
+        property_override("ro.product.device", "ef48s");
     } 
     else if (strstr(device_buf, "IM-A850K")) 
     {
-        property_set("ro.product.device", "ef49k");
+        property_override("ro.product.device", "ef49k");
     } 
     else if (strstr(device_buf, "IM-A850L"))
     {
-        property_set("ro.product.device", "ef50l");
-		property_set("telephony.lteOnCdmaDevice", "1"); //Only L device support CDMA-2000 1xEV-DO
+        property_override("ro.product.device", "ef50l");
+		property_override("telephony.lteOnCdmaDevice", "1"); //Only L device support CDMA-2000 1xEV-DO
     }
 }
