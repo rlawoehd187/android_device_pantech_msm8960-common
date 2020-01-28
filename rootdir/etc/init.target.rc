@@ -81,7 +81,7 @@ on post-fs-data
  #  exec /system/bin/sh /init.pantech.sepolicy.sh ${selinux.pan_sepolicy_ver}
 
 #start camera server as daemon
-service qcamerasvr /system/vendor/bin/mm-qcamera-daemon
+# service qcamerasvr /system/vendor/bin/mm-qcamera-daemon
         class late_start
         user camera
     group camera system inet input graphics bluetooth
