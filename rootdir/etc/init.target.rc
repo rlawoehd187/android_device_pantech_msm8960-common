@@ -69,12 +69,12 @@ on post-fs-data
  #  exec /system/bin/sh /init.pantech.sepolicy.sh ${selinux.pan_sepolicy_ver}
 
 #start camera server as daemon
-service qcamerasvr /system/bin/mm-qcamera-daemon
+service qcamerasvr /system/vendor/bin/mm-qcamera-daemon
         class late_start
         user camera
     group camera system inet input graphics bluetooth
 
-service thermald /system/bin/thermald
+service thermald /system/vendor/bin/thermald
    class main
    user root
    group root
@@ -87,7 +87,7 @@ service thermal-engine /system/bin/thermal-engine
    socket thermal-recv-client stream 0660 system system
    #disabled
 
-service kickstart /system/bin/qcks -i /firmware/image/ -r /data/tombstones/mdm/
+service kickstart /system/vendor/bin/qcks -i /firmware/image/ -r /data/tombstones/mdm/
    class core
    oneshot
    disabled
@@ -102,7 +102,7 @@ service qrngd /system/bin/qrngd -f
    user root
    group root
 
-service qseecomd /system/bin/qseecomd
+service qseecomd /system/vendor/bin/qseecomd
    class late_start
    user root
    group root

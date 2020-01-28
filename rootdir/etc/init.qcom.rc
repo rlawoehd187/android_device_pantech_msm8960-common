@@ -469,7 +469,7 @@ on property:bluetooth.isEnabled=true
 on property:vold.decrypt=trigger_restart_framework
     start config_bluetooth
 
-service cnd /system/bin/cnd
+service cnd /system/vendor/bin/cnd
     class late_start
     socket cnd stream 660 root inet
 
@@ -486,7 +486,7 @@ service rmt_storage /system/bin/rmt_storage
 on property:ro.boot.emmc=true
     start rmt_storage
 
-service qcom-sh /system/bin/sh /init.qcom.sh
+service qcom-sh /system/vendor/bin/sh /init.qcom.sh
     class late_start
     user root
     oneshot
@@ -496,7 +496,7 @@ service config_bluetooth /system/bin/sh /system/etc/init.qcom.bt.sh "onboot"
     user root
     oneshot
 
-service hciattach /system/bin/sh /system/etc/init.qcom.bt.sh
+service hciattach /system/vendor/bin/sh /system/etc/init.qcom.bt.sh
     class late_start
     user bluetooth
     group qcom_oncrpc bluetooth net_bt_admin system
@@ -523,31 +523,31 @@ on property:bluetooth.hciattach=true
 on property:bluetooth.hciattach=false
     setprop bluetooth.status off
 
-service bridgemgrd /system/bin/bridgemgrd
+service bridgemgrd /system/vendor/bin/bridgemgrd
     class late_start
     user radio
     group radio qcom_diag
     disabled
 
-service port-bridge /system/bin/port-bridge /dev/smd0 /dev/ttyGS0
+service port-bridge /system/vendor/bin/port-bridge /dev/smd0 /dev/ttyGS0
     class late_start
     user system
     group system inet
     disabled
 
-service qmiproxy /system/bin/qmiproxy
+service qmiproxy /system/vendor/bin/qmiproxy
     class main
     user radio
     group radio qcom_diag
     disabled
 
 # QMUX must be in multiple groups to support external process connections
-service qmuxd /system/bin/qmuxd
+service qmuxd /system/vendor/bin/qmuxd
     class main
     user radio
     group radio audio bluetooth gps qcom_diag
 
-service netmgrd /system/bin/netmgrd
+service netmgrd /system/vendor/bin/netmgrd
     class main
     user root
     group root wifi wakelock radio inet
@@ -676,14 +676,14 @@ on property:sys.boot_completed=1
 #    group system radio
 #    onrestart /system/bin/log -t RIL-ATFWD -p w "ATFWD daemon restarted"
 
-service hostapd /system/bin/hostapd -dddd /data/misc/wifi/hostapd.conf
+service hostapd /system/vendor/bin/hostapd -dddd /data/misc/wifi/hostapd.conf
     class late_start
     user root
     group root
     oneshot
     disabled
 
-service ds_fmc_appd /system/bin/ds_fmc_appd -p "rmnet0" -D
+service ds_fmc_appd /system/vendor/bin/ds_fmc_appd -p "rmnet0" -D
     class late_start
     group radio wifi inet
     disabled
@@ -778,7 +778,7 @@ service skypd /system/bin/skypd
    user system
    group radio system shell
    
-service fetch-swv /system/bin/fetch-swv
+service fetch-swv /system/vendor/bin/fetch-swv
     class late_start
     oneshot
     disabled
