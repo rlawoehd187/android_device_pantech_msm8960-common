@@ -109,7 +109,7 @@ static char *camera_fixup_getparams(int id, const char *settings)
         videoMode = (!strcmp(params.get(android::CameraParameters::KEY_RECORDING_HINT), "true"));
     }
 
-    params.set(android::CameraParameters::KEY_QC_SUPPORTED_ISO_MODES, iso_values[id]);
+/*    params.set(android::CameraParameters::KEY_QC_SUPPORTED_ISO_MODES, iso_values[id]); */
 
     /* Set supported scene modes */
   /*  if (params.get(android::CameraParameters::KEY_SUPPORTED_SCENE_MODES)) {
@@ -163,7 +163,7 @@ static char *camera_fixup_setparams(int id, const char *settings)
 
     if (videoMode) {
        // params.set("dis", "disable");
-        params.set(android::CameraParameters::KEY_QC_ZSL, "off");
+/*        params.set(android::CameraParameters::KEY_QC_ZSL, "off");
     } else {
         params.set(android::CameraParameters::KEY_QC_ZSL, "on");
     }
@@ -181,7 +181,7 @@ static char *camera_fixup_setparams(int id, const char *settings)
         else if(strcmp(isoMode, "ISO1600") == 0)
             params.set(android::CameraParameters::KEY_QC_ISO_MODE, "1600");
         else if(strcmp(isoMode, "ISO3200") == 0)
-            params.set(android::CameraParameters::KEY_QC_ISO_MODE, "3200");
+            params.set(android::CameraParameters::KEY_QC_ISO_MODE, "3200"); */
     }
 
 	//HDR
