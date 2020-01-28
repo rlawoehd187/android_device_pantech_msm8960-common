@@ -140,6 +140,9 @@ ifeq ($(HOST_OS),linux)
   endif
 endif
 
+# SDClang
+TARGET_USE_SDCLANG := true
+
 # Init
 TARGET_NO_INITLOGO := true
 
