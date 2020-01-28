@@ -90,6 +90,12 @@ on boot
     chmod 0666 /dev/touch_monitor
     chmod 0666 /dev/touch_fops
 
+# Create perfd deamon related dirs
+    mkdir /data/misc/perfd 0755 root system
+    chmod 2755 /data/misc/perfd
+    mkdir /data/system/perfd 0770 root system
+    chmod 2770 /data/system/perfd
+
 #PANTECH_CHARGER_MONITOR_TEST or PANTECH_BATTERY_CHARING_DISCHARING_TEST
     chmod 0666 /dev/smb347_charger
 
