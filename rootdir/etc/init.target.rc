@@ -157,7 +157,7 @@ service imsdatadaemon /system/bin/imsdatadaemon
     group ims radio wifi net_raw log qcom_diag net_admin
     disabled
 
-service wcnss-service /system/bin/wcnss_service
+service wcnss-service /vendor/bin/wcnss_service
     class main #for data encryption late_start 
     user system
     group system wifi
