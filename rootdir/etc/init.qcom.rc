@@ -70,7 +70,7 @@ on boot
 #    domainname localdomain
     
     setprop persist.sys.usb.config "cdrom,mtp,diag,diag_mdm,serial_hsic,obex,adb"
-   
+    setprop sys.usb.ffs.aio_compat 1   
 
 #LS1 LCD
     # Related CONFIG_F_SKYDISP_CABC_CTRL 

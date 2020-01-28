@@ -43,7 +43,7 @@ on fs
     # these partition flashed on the device. Failure to mount any partition in fstab file
     # results in failure to launch late-start class.
 
-    mount_all fstab.qcom
+    mount_all fstab.qcom  --early
     
     wait /dev/block/platform/msm_sdcc.1/by-name/modem
     mount vfat /dev/block/platform/msm_sdcc.1/by-name/modem /firmware ro shortname=lower,uid=1000,gid=1000,dmask=227,fmask=337
@@ -51,6 +51,18 @@ on fs
 	#log partition by mmcblk_utils
 	#wait /dev/block/platform/msm_sdcc.1/by-name/log
 	#exec /system/bin/mmcblk_utils fat /dev/block/platform/msm_sdcc.1/by-name/log
+
+    # Start HW service manager early
+    start hwservicemanager
+
+on late-fs
+    # Start services for bootanim
+    start surfaceflinger
+    start bootanim
+    start configstore-hal-1-0
+    start gralloc-2-0
+
+    mount_all fstab.qcom --late
 
 on boot
    write /sys/devices/i2c-3/3-0024/cyttsp_update_fw 1
