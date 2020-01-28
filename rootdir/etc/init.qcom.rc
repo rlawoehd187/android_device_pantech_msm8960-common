@@ -478,7 +478,7 @@ service cnd /system/vendor/bin/cnd
     class late_start
     socket cnd stream 660 root inet
 
-service irsc_util /system/bin/logwrapper /system/bin/irsc_util "/vendor/etc/sec_config"
+service irsc_util /vendor/bin/logwrapper /vendor/bin/irsc_util "/vendor/etc/sec_config"
     class main
     user root
     oneshot
@@ -496,7 +496,7 @@ service qcom-sh /system/vendor/bin/sh /init.qcom.sh
     user root
     oneshot
 
-service config_bluetooth /system/bin/sh /system/etc/init.qcom.bt.sh "onboot"
+service config_bluetooth /vendor/bin/sh /system/etc/init.qcom.bt.sh "onboot"
     class core
     user root
     oneshot

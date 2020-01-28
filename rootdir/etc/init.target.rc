@@ -91,7 +91,7 @@ service thermald /system/vendor/bin/thermald
    user root
    group root
 
-service thermal-engine /system/bin/thermal-engine
+service thermal-engine /vendor/bin/thermal-engine
    class main
    user root
    group root
@@ -109,12 +109,12 @@ service mdm_helper /system/bin/mdm_helper
     onrestart setprop ro.service.mdm_helper_restarted "true"
     disabled
 
-service qrngd /system/bin/qrngd -f
+service qrngd /vendor/bin/qrngd -f
    class main
    user root
    group root
 
-service qseecomd /system/vendor/bin/qseecomd
+service qseecomd /vendor/bin/qseecomd
    class late_start
    user root
    group root
