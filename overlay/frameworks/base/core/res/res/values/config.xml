@@ -66,4 +66,6 @@
      -->
      <integer translatable="false" name="config_wifi_wakeup_available">1</integer>
 
+    <!-- If this is true, the screen will fade off. -->
+    <bool name="config_animateScreenLights">true</bool>
 </resources>
