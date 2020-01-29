@@ -33,6 +33,12 @@
 #include <camera/Camera.h>
 #include <camera/CameraParameters.h>
 
+// Camera Wrapper parameters
+
+static const char KEY_CAMERA_MODE[] = "camera-mode";
+static const char KEY_ISO_MODE[] = "iso";
+static const char KEY_SUPPORTED_ISO_MODES[] = "iso-values";
+
 static android::Mutex gCameraWrapperLock;
 static camera_module_t *gVendorModule = 0;
 
@@ -94,52 +100,26 @@ const static char * iso_values[] = {"auto,ISO100,ISO200,ISO400,ISO800,ISO1600,IS
 
 static char *camera_fixup_getparams(int id, const char *settings)
 {
-    bool videoMode = false;
-   // char *manipBuf;
+    CameraParameters params;
+    params.unflatten(String8(settings));
 
-    android::CameraParameters params;
-    params.unflatten(android::String8(settings));
-
-#if !LOG_NDEBUG
-    ALOGV("%s: original parameters:", __FUNCTION__);
+    ALOGV("%s: Original parameters:", __FUNCTION__);
     params.dump();
-#endif
 
-    if (params.get(android::CameraParameters::KEY_RECORDING_HINT)) {
-        videoMode = (!strcmp(params.get(android::CameraParameters::KEY_RECORDING_HINT), "true"));
+    /* Rear photos: Remove HDR scene mode */
+    if (id == REAR_CAMERA_ID) {
+        params.set(CameraParameters::KEY_SUPPORTED_SCENE_MODES,
+                "auto,action,night,sunset,party");
     }
 
-/*    params.set(android::CameraParameters::KEY_QC_SUPPORTED_ISO_MODES, iso_values[id]); */
+    /* Photos: Correct exposed ISO values */
+    params.set(KEY_SUPPORTED_ISO_MODES,
+            "auto,ISO_HJR,ISO100,ISO200,ISO400,ISO800,ISO1600");
 
-    /* Set supported scene modes */
-  /*  if (params.get(android::CameraParameters::KEY_SUPPORTED_SCENE_MODES)) {
-        params.set(android::CameraParameters::KEY_SUPPORTED_SCENE_MODES,
-                "auto,portrait,landscape,portrait,snow,beach,sunset,night,backlight,sports,antishake,flowers,candlelight,fireworks,party,theatre,action,ar,indoor,text,hdr");
-    }*/
-    if (id = 1) {
-        params.set(android::CameraParameters::KEY_SUPPORTED_SCENE_MODES, "auto,action,night,sunset,party");
-    }
-
-    //params.set(android::CameraParameters::KEY_MIN_EXPOSURE_COMPENSATION, "-4");
-    //params.set(android::CameraParameters::KEY_MAX_EXPOSURE_COMPENSATION, "4");
-	//Add HDR
-/*
-    if (!videoMode) {
-        manipBuf = strdup(params.get(android::CameraParameters::KEY_SUPPORTED_SCENE_MODES));
-        if (manipBuf != NULL && strstr(manipBuf,"hdr") == NULL) {
-            strncat(manipBuf,",hdr",4);
-            params.set(android::CameraParameters::KEY_SUPPORTED_SCENE_MODES,
-                manipBuf);
-        }
-        free(manipBuf);
-    }*/
-
-#if !LOG_NDEBUG
-    ALOGV("%s: fixed parameters:", __FUNCTION__);
+    ALOGV("%s: Fixed parameters:", __FUNCTION__);
     params.dump();
-#endif
 
-    android::String8 strParams = params.flatten();
+    String8 strParams = params.flatten();
     char *ret = strdup(strParams.string());
 
     return ret;
@@ -147,62 +127,43 @@ static char *camera_fixup_getparams(int id, const char *settings)
 
 static char *camera_fixup_setparams(int id, const char *settings)
 {
-    bool videoMode = false;
+    CameraParameters params;
+    params.unflatten(String8(settings));
 
-    android::CameraParameters params;
-    params.unflatten(android::String8(settings));
-
-#if !LOG_NDEBUG
-    ALOGV("%s: original parameters:", __FUNCTION__);
+    ALOGV("%s: Original parameters:", __FUNCTION__);
     params.dump();
-#endif
 
-    if (params.get(android::CameraParameters::KEY_RECORDING_HINT)) {
-        videoMode = (!strcmp(params.get(android::CameraParameters::KEY_RECORDING_HINT), "true"));
+    const char *recordHint = params.get(CameraParameters::KEY_RECORDING_HINT);
+    bool isVideo = recordHint && !strcmp(recordHint, "true");
+
+    /* Rear videos: Correct camera mode to 0 */
+    if (isVideo && id == REAR_CAMERA_ID) {
+        params.set(KEY_CAMERA_MODE, "0");
     }
 
-    if (videoMode) {
-       // params.set("dis", "disable");
-/*        params.set(android::CameraParameters::KEY_QC_ZSL, "off");
-    } else {
-        params.set(android::CameraParameters::KEY_QC_ZSL, "on");
+    /* Photos: Map the corrected ISO values to the ones in the HAL */
+    const char *isoMode = params.get(KEY_ISO_MODE);
+    if (isoMode) {
+        if (!strcmp(isoMode, "ISO100"))
+            params.set(KEY_ISO_MODE, "100");
+        else if (!strcmp(isoMode, "ISO200"))
+            params.set(KEY_ISO_MODE, "200");
+        else if (!strcmp(isoMode, "ISO400"))
+            params.set(KEY_ISO_MODE, "400");
+        else if (!strcmp(isoMode, "ISO800"))
+            params.set(KEY_ISO_MODE, "800");
+        else if (!strcmp(isoMode, "ISO1600"))
+            params.set(KEY_ISO_MODE, "1600");
     }
 
-    if(params.get("iso")) {
-        const char* isoMode = params.get(android::CameraParameters::KEY_QC_ISO_MODE);
-        if(strcmp(isoMode, "ISO100") == 0)
-            params.set(android::CameraParameters::KEY_QC_ISO_MODE, "100");
-        else if(strcmp(isoMode, "ISO200") == 0)
-            params.set(android::CameraParameters::KEY_QC_ISO_MODE, "200");
-        else if(strcmp(isoMode, "ISO400") == 0)
-            params.set(android::CameraParameters::KEY_QC_ISO_MODE, "400");
-        else if(strcmp(isoMode, "ISO800") == 0)
-            params.set(android::CameraParameters::KEY_QC_ISO_MODE, "800");
-        else if(strcmp(isoMode, "ISO1600") == 0)
-            params.set(android::CameraParameters::KEY_QC_ISO_MODE, "1600");
-        else if(strcmp(isoMode, "ISO3200") == 0)
-            params.set(android::CameraParameters::KEY_QC_ISO_MODE, "3200"); */
-    }
-
-	//HDR
-  //  if (!videoMode && !strncmp(params.get(android::CameraParameters::KEY_SCENE_MODE),"hdr",3)) {
-    //if (!videoMode) {
-    //    params.set(android::CameraParameters::KEY_HDR,
-    //            android::CameraParameters::HDR_ON);
-      //  params.set("hdr-values", "1");
-    //} else {
-    //    params.set(android::CameraParameters::KEY_HDR,
-     //           android::CameraParameters::HDR_OFF);
-    //    params.set("hdr-values", "0");
-  //  }
-
-#if !LOG_NDEBUG
-    ALOGV("%s: fixed parameters:", __FUNCTION__);
+    ALOGV("%s: Fixed parameters:", __FUNCTION__);
     params.dump();
-#endif
 
-    android::String8 strParams = params.flatten();
-    char *ret = strdup(strParams.string());
+    String8 strParams = params.flatten();
+    if (fixed_set_params[id])
+        free(fixed_set_params[id]);
+    fixed_set_params[id] = strdup(strParams.string());
+    char *ret = fixed_set_params[id];
 
     return ret;
 }
