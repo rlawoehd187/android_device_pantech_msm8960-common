@@ -60,4 +60,10 @@
          format is UMTS|LTE|... -->
     <string translatable="false" name="config_radio_access_family">GSM | WCDMA | LTE | CDMA | EVDO | TD_SCDMA</string>
 
+    <!-- Controls the WiFi wakeup feature.
+          0 = Not available.
+          1 = Available.
+     -->
+     <integer translatable="false" name="config_wifi_wakeup_available">1</integer>
+
 </resources>
