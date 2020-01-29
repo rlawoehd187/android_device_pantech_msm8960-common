@@ -89,7 +89,7 @@ service qcamerasvr /system/vendor/bin/mm-qcamera-daemon
 service thermald /system/vendor/bin/thermald
    class main
    user root
-   group root
+   group radio system
 
 service thermal-engine /vendor/bin/thermal-engine
    class main
