@@ -120,7 +120,6 @@ DEVICE_PROVISIONED=1
 debug.sf.hw=1
 debug.egl.hw=1
 persist.data_netmgrd_mtu=1450
-persist.timed.enable=true
 
 # system props for the data modules
 persist.data.netmgrd.qos.enable=false

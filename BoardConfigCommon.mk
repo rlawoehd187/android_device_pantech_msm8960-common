@@ -166,8 +166,6 @@ TARGET_HW_DISK_ENCRYPTION := false
 
 TARGET_NO_SD_ADOPT_ENCRYPTION := true
 
-#BOARD_USES_QC_TIME_SERVICES 		:= true
-
 # Enable Minikin text layout engine
 USE_MINIKIN 						:= true
 
