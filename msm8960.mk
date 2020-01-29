@@ -26,9 +26,6 @@ PRODUCT_PACKAGES += \
     libwfcu \
     libwpa_client \
     hostapd \
-    hostapd_default.conf \
-    hostapd.accept \
-    hostapd.deny \
     wificond \
     wpa_supplicant
 
@@ -50,10 +47,6 @@ PRODUCT_PACKAGES += \
     LiveWallpapersPicker \
     VisualizationWallpapers \
     librs_jni
-
-# Browser
-PRODUCT_PACKAGES += \
-    Gello
 
 # Display
 PRODUCT_PACKAGES += \
@@ -247,7 +240,8 @@ PRODUCT_PACKAGES += \
 # Lights
 PRODUCT_PACKAGES += \
     android.hardware.light@2.0-impl \
-    android.hardware.light@2.0-service
+    android.hardware.light@2.0-service \
+    lights.msm8960
 
 # NFC Support
 # PRODUCT_PACKAGES += \

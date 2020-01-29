@@ -26,6 +26,7 @@ BOARD_VENDOR 					:= pantech
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := MSM8960
 TARGET_NO_BOOTLOADER := true
+TARGET_NO_RADIOIMAGE := true
 
 # Platform
 TARGET_BOARD_PLATFORM := msm8960
@@ -50,9 +51,9 @@ BOARD_KERNEL_PAGESIZE := 2048
 BOARD_FORCE_RAMDISK_ADDRESS := 0x82200000
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x2000000
 BOARD_KERNEL_IMAGE_NAME := zImage
-BOARD_KERNEL_CMDLINE := console=NULL,115200,n8 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3 loglevel=0 vmalloc=0x16000000 androidboot.selinux=permissive
+BOARD_KERNEL_CMDLINE := console=NULL,115200,n8 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3F ehci-hcd.park=3 loglevel=0 vmalloc=0x16000000
+BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := arm-linux-androideabi-
-
 
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
@@ -90,21 +91,11 @@ BOARD_HAVE_BLUETOOTH := true
 BOARD_HAVE_BLUETOOTH_QCOM := true
 BLUETOOTH_HCI_USE_MCT := true
 
-# QCOM enhanced A/V
-TARGET_ENABLE_QC_AV_ENHANCEMENTS 	:= true
-
-BOARD_USES_SECURE_SERVICES 		:= true
-
-BOARD_USES_EXTRA_THERMAL_SENSOR 	:= true
-
 # Camera
 TARGET_PROVIDES_CAMERA_HAL := true
 USE_DEVICE_SPECIFIC_CAMERA := true
-
-TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS:= true
-
-# Media
 TARGET_USES_MEDIA_EXTENSIONS := true
+TARGET_NEEDS_PLATFORM_TEXT_RELOCATIONS:= true
 
 # HIDL
 DEVICE_MANIFEST_FILE := $(COMMON_PATH)/manifest.xml
@@ -131,14 +122,8 @@ TARGET_POWERHAL_VARIANT := qcom
 TARGET_SYSTEM_PROP += $(COMMON_PATH)/system.prop
 
 # Dexpreopt
-ifeq ($(HOST_OS),linux)
-  ifneq ($(TARGET_BUILD_VARIANT),eng)
-    ifeq ($(WITH_DEXPREOPT),)
-      WITH_DEXPREOPT := true
-      WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := true
-    endif
-  endif
-endif
+WITH_DEXPREOPT := true
+WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := true
 
 # SDClang
 TARGET_USE_SDCLANG := true
@@ -152,28 +137,6 @@ BOARD_CHARGER_ENABLE_SUSPEND 		:= true
 # Enable keymaster app checking
 TARGET_KEYMASTER_WAIT_FOR_QSEE := true
 
-BOARD_VOLD_MAX_PARTITIONS := 28
-
-# Sensors
-TARGET_NEEDS_GCC_LIBC := true
-
-# Flags
-BOARD_NO_SECURE_DISCARD := true
-
-# Encryption
-TARGET_HW_DISK_ENCRYPTION := false
-
-TARGET_NO_SD_ADOPT_ENCRYPTION := true
-
-# Enable Minikin text layout engine
-USE_MINIKIN 						:= true
-
-#Enable prebuild chromium for cut time build
-PRODUCT_PREBUILT_WEBVIEWCHROMIUM 	:= yes
-
-# Include an expanded selection of fonts
-EXTENDED_FONT_FOOTPRINT 			:= true
-
 # qcom sepolicy
 include device/qcom/sepolicy/sepolicy.mk
 
@@ -185,9 +148,9 @@ BOARD_HAS_QCOM_WLAN              		:= true
 BOARD_WLAN_DEVICE                		:= qcwcn
 WPA_SUPPLICANT_VERSION           		:= VER_0_8_X
 BOARD_WPA_SUPPLICANT_DRIVER      		:= NL80211
-BOARD_WPA_SUPPLICANT_PRIVATE_LIB 		:= lib_driver_cmd_$(BOARD_WLAN_DEVICE)
+BOARD_WPA_SUPPLICANT_PRIVATE_LIB 		:= lib_driver_cmd_qcwcn
 BOARD_HOSTAPD_DRIVER             		:= NL80211
-BOARD_HOSTAPD_PRIVATE_LIB        		:= lib_driver_cmd_$(BOARD_WLAN_DEVICE)
+BOARD_HOSTAPD_PRIVATE_LIB        		:= lib_driver_cmd_qcwcn
 PRODUCT_VENDOR_MOVE_ENABLED      		:= true
 WIFI_DRIVER_MODULE_NAME          		:= "wlan"
 WIFI_DRIVER_FW_PATH_STA          		:= "sta"
