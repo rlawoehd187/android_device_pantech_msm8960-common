@@ -29,9 +29,6 @@ import init.pantech.usb.rc
 import init.target.rc
 import init.qcom.power.rc
 
-#on early-init
-#    write /sys/block/mmcblk0/queue/scheduler noop
-
 on init
     # Set permissions for persist partition
     mkdir /persist 0771 system system
@@ -303,7 +300,7 @@ on post-fs-data
     mkdir /data/misc/location/mq 0770 gps gps
     mkdir /data/misc/location/xtwifi 0770 gps gps
     mkdir /data/misc/location/gpsone_d 0770 system gps
-    mkdir /data/misc/location/quipc 0770 gps system
+    mkdir /data/misc/location/quipc 0770 gps gps
     mkdir /data/misc/location/gsiff 0770 gps gps
 
     #Create directory from IMS services
@@ -387,12 +384,6 @@ on post-fs-data
 #    write /persist/avc/denied.log ""
 #    chmod 0660 /persist/avc/denied.log
 
-# <-- FEATURE_DS_WIFI_LGU_MWLAN - 2012-10-16, @PS4, Kyeongyeon Song
-    chmod 0644 /system/lib/modules/mwlan_aarp.ko
-    chmod 0644 /system/lib/modules/ipsecdrvtl.ko
-    insmod /system/lib/modules/mwlan_aarp.ko
-# --> FEATURE_DS_WIFI_LGU_MWLAN
-
     chown system system /sys/class/android_usb/android0/f_mass_storage/lun0/file
     chmod 0666 /sys/class/android_usb/android0/f_mass_storage/lun0/file
     chown system system /sys/class/android_usb/android0/f_mass_storage/lun1/file
@@ -474,19 +465,10 @@ on property:bluetooth.isEnabled=true
 on property:vold.decrypt=trigger_restart_framework
     start config_bluetooth
 
-service cnd /system/vendor/bin/cnd
-    class late_start
-    socket cnd stream 660 root inet
-
-service irsc_util /vendor/bin/logwrapper /vendor/bin/irsc_util "/vendor/etc/sec_config"
+service irsc_util /vendor/bin/irsc_util "/vendor/etc/sec_config"
     class main
     user root
     oneshot
-
-service rmt_storage /system/bin/rmt_storage
-    class core
-    user root
-    disabled
 
 on property:ro.boot.emmc=true
     start rmt_storage
@@ -496,16 +478,17 @@ service qcom-sh /system/vendor/bin/sh /init.qcom.sh
     user root
     oneshot
 
-service config_bluetooth /vendor/bin/sh /system/etc/init.qcom.bt.sh "onboot"
+service config_bluetooth /system/bin/sh /system/etc/init.qcom.bt.sh "onboot"
     class core
     user root
     oneshot
 
-service hciattach /system/vendor/bin/sh /system/etc/init.qcom.bt.sh
+service hciattach /system/bin/sh /system/vendor/etc/init.qcom.bt.sh
     class late_start
     user bluetooth
     group qcom_oncrpc bluetooth net_bt_admin system
     disabled
+    seclabel u:r:bluetooth_loader:s0
     oneshot
 
 service bt-dun /system/bin/dun-server /dev/smd7 /dev/rfcomm0
@@ -515,13 +498,6 @@ service bt-dun /system/bin/dun-server /dev/smd7 /dev/rfcomm0
     disabled
     oneshot
 
-service bt-sap /system/bin/sapd 15
-    user bluetooth
-    group bluetooth net_bt_admin
-    class late_start
-    disabled
-    oneshot
-    
 on property:bluetooth.hciattach=true
     start hciattach
 
@@ -557,7 +533,7 @@ service netmgrd /system/vendor/bin/netmgrd
     user root
     group root wifi wakelock radio inet
 
-service sensors /system/bin/sensors.qcom
+service sensors /system/vendor/bin/sensors.qcom
     class late_start
     user root
     group root radio system
@@ -570,24 +546,6 @@ on property:ro.use_data_netmgrd=false
 # but only if ro.data.large_tcp_window_size property is set.
 on property:ro.data.large_tcp_window_size=true
     write /proc/sys/net/ipv4/tcp_adv_win_scale  2
-
-service amp_init /system/bin/amploader -i
-    class late_start
-    user root
-    disabled
-    oneshot
-
-service amp_load /system/bin/amploader -l 7000
-    class late_start
-    user root
-    disabled
-    oneshot
-
-service amp_unload /system/bin/amploader -u
-    class late_start
-    user root
-    disabled
-    oneshot
 
 service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
     -ip2p0 -Dnl80211 -c/data/misc/wifi/p2p_supplicant.conf \
@@ -605,52 +563,6 @@ service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
     disabled
     oneshot
 
-service dhcpcd_wlan0 /system/bin/dhcpcd -aABDKL
-    class main
-    disabled
-    oneshot
-
-service dhcpcd_p2p /system/bin/dhcpcd -aABKL
-    class main
-    disabled
-    oneshot
-
-service dhcpcd_bt-pan /system/bin/dhcpcd -ABKL
-    class main
-    disabled
-    oneshot
-
-service dhcpcd_eth0 /system/bin/dhcpcd -ABDKL
-    class main
-    disabled
-    oneshot
-
-service iprenew_wlan0 /system/bin/dhcpcd -n
-    class main
-    disabled
-    oneshot
-
-service iprenew_p2p /system/bin/dhcpcd -n
-    class main
-    disabled
-    oneshot
-
-service dhcpcd_bnep1 /system/bin/dhcpcd -BKLG
-    disabled
-    oneshot
-
-service dhcpcd_bnep2 /system/bin/dhcpcd -BKLG
-    disabled
-    oneshot
-
-service dhcpcd_bnep3 /system/bin/dhcpcd -BKLG
-    disabled
-    oneshot
-
-service dhcpcd_bnep4 /system/bin/dhcpcd -BKLG
-    disabled
-    oneshot
-
 on property:crypto.driver.load=1
      insmod /system/lib/modules/qce.ko
      insmod /system/lib/modules/qcedev.ko
@@ -659,27 +571,8 @@ on property:crypto.driver.load=0
      exec /system/bin/rmmod qcedev.ko
      exec /system/bin/rmmod qce.ko
 
-# pantech server
-#service pantech_server /system/bin/pantech_server
-#    class main
-#    socket skytest stream 666
-#    socket pantech_debug_sock stream 666
-#    socket pantech_pm_sock stream 666
-#    user root
-    
-service preinstall /system/bin/sh /preinstall.sh
-    oneshot
-    disabled
-
 on property:sys.boot_completed=1
-    start qcom-post-boot
-    start preinstall
-
-#service atfwd /system/bin/ATFWD-daemon
-#    class late_start
-#    user system
-#    group system radio
-#    onrestart /system/bin/log -t RIL-ATFWD -p w "ATFWD daemon restarted"
+    write /sys/kernel/fast_charge/force_fast_charge 1
 
 service hostapd /system/vendor/bin/hostapd -dddd /data/misc/wifi/hostapd.conf
     class late_start
@@ -696,14 +589,6 @@ service ds_fmc_appd /system/vendor/bin/ds_fmc_appd -p "rmnet0" -D
 
 on property:persist.data.ds_fmc_app.mode=1
     start ds_fmc_appd
-
-service ims_regmanager /system/bin/exe-ims-regmanagerprocessnative
-    class late_start
-    group qcom_oncrpc net_bt_admin inet radio wifi
-    disabled
-
-on property:persist.ims.regmanager.mode=1
-    start ims_regmanager
 
 on property:ro.data.large_tcp_window_size=true
     # Adjust socket buffer to enlarge TCP receive window for high bandwidth (e.g. DO-RevB)
@@ -740,49 +625,6 @@ on property:persist.radio.sglte_csfb=true
 on property:persist.radio.sglte_csfb=false
     kill qmiproxy 15
     
-service diag_mdlog_start /system/bin/diag_mdlog
-    class late_start
-    user sdcard_rw
-    group system qcom_diag sdcard_rw sdcard_r media_rw
-    disabled
-    oneshot
-
-service diag_mdlog_stop /system/bin/diag_mdlog -k
-    class late_start
-    user sdcard_rw
-    group system qcom_diag sdcard_rw sdcard_r media_rw
-    disabled
-    oneshot
-#20140124 LS4_WIFI Warfs WiFi Porting KiKat
-# FEATURE_PANTECH_WLAN_DEBUG_LEVEL_FRAMEWORK 20121022 thkim_wifi add for wifi log --> 
-service pan_log /system/bin/pan_log
-    class late_start
-    user root
-    group system
-    disabled
-    oneshot
-# FEATURE_PANTECH_WLAN_DEBUG_LEVEL_FRAMEWORK 20121022 thkim_wifi add for wifi log <--  
-# FEATURE_PANTECH_WLAN, 20111018 thkim_wifi add for wifi ftm mode --> 
-# Pantech only, 2012-04-02, ymlee_p11019, On Auto test mode, 5G DPD enabled, added "oneshot" ++++
-service ftm_ptt /system/bin/ftm_ptt -d
-    class late_start #FEATURE_SKY_DATA_ENCRYPTION 
-    user root
-    group radio
-    disabled
-    oneshot
-
-on property:ftm_ptt_start=1
-    start ftm_ptt
-
-on property:ftm_ptt_start=0
-    stop ftm_ptt
-# FEATURE_PANTECH_WLAN, 20111018 thkim_wifi add for wifi ftm mode <--
-# [FEATURE_LGU_CP_UICC_SUPPORT_NFC]
-service skypd /system/bin/skypd
-   class main
-   user system
-   group radio system shell
-   
 service fetch-swv /system/vendor/bin/fetch-swv
     class late_start
     oneshot
@@ -790,16 +632,3 @@ service fetch-swv /system/vendor/bin/fetch-swv
 
 on property:ro.baseband.fix=true
     start fetch-swv
-
-# Setting default property , LS5 p13120
-service usb_manager /system/bin/usb_manager
-	class main
-	user root    
-	oneshot
-	
-service conn_init /system/bin/logwrapper /system/bin/conn_init
-    class late_start
-    user root
-    group system wifi radio root
-    oneshot
-

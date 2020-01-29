@@ -81,7 +81,7 @@ on post-fs-data
  #  exec /system/bin/sh /init.pantech.sepolicy.sh ${selinux.pan_sepolicy_ver}
 
 #start camera server as daemon
-# service qcamerasvr /system/vendor/bin/mm-qcamera-daemon
+service qcamerasvr /system/vendor/bin/mm-qcamera-daemon
         class late_start
         user camera
     group camera system inet input graphics bluetooth
@@ -103,11 +103,6 @@ service kickstart /system/vendor/bin/qcks -i /firmware/image/ -r /data/tombstone
    class core
    oneshot
    disabled
-
-service mdm_helper /system/bin/mdm_helper
-    class main
-    onrestart setprop ro.service.mdm_helper_restarted "true"
-    disabled
 
 service qrngd /vendor/bin/qrngd -f
    class main
@@ -150,40 +145,9 @@ service timekeep /system/bin/timekeep restore
     oneshot
     seclabel u:r:timekeep:s0
 
-service imsqmidaemon /system/bin/imsqmidaemon
-    class main
-    user system
-    socket ims_qmid stream 0660 system radio
-    group ims radio net_raw log qcom_diag
-    disabled
-
-on boot
-    start imsqmidaemon
-
-
-# imsdatadaemon starts with root and UID will be downgraded to SYSTEM.
-service imsdatadaemon /system/bin/imsdatadaemon
-    class main
-    user root
-    socket ims_datad stream 0660 system radio
-    group ims radio wifi net_raw log qcom_diag net_admin
-    disabled
-
 service wcnss-service /vendor/bin/wcnss_service
     class main #for data encryption late_start 
     user system
     group system wifi
     oneshot
 
-on property:sys.ims.QMI_DAEMON_STATUS=1
-    start imsdatadaemon
-
-service ims_rtp_daemon /system/bin/ims_rtp_daemon
-   class main
-   user system
-   socket ims_rtpd stream 0660 system ims
-   group ims net_raw diag qcom_diag log
-   disabled
-
-on property:sys.ims.DATA_DAEMON_STATUS=1
-    start ims_rtp_daemon
